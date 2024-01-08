@@ -1,0 +1,11 @@
+channels:
+- defaults
+dependencies:
+- seaborn
+- numpy
+- pandas
+- ipykernel
+- python
+- matplotlib
+- openpyxl
+name: convenios-ssmo
