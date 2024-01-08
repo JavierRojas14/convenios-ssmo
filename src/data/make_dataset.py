@@ -76,6 +76,14 @@ def leer_y_limpiar_personas_ssmo(input_filepath):
     return df_personas
 
 
+def unir_convenios_y_personas(df_convenios, df_personas):
+    convenios_con_procedencia = df_convenios.merge(
+        df_personas, how="left", left_on="NomRevisor", right_on="nombre_formateado"
+    )
+
+    return convenios_con_procedencia
+
+
 @click.command()
 @click.argument("input_filepath", type=click.Path(exists=True))
 @click.argument("output_filepath", type=click.Path())
@@ -90,9 +98,13 @@ def main(input_filepath, output_filepath):
     df_convenios = leer_y_limpiar_convenios(input_filepath)
     df_personas = leer_y_limpiar_personas_ssmo(input_filepath)
 
+    # Une convenios y personas
+    df_convenios_y_procedencia = unir_convenios_y_personas(df_convenios, df_personas)
+
     # Guarda archivos
     df_convenios.to_csv(f"{output_filepath}/convenios_limpios.csv", index=False)
     df_personas.to_csv(f"{output_filepath}/personas_limpios.csv", index=False)
+    df_convenios_y_procedencia.to_csv(f"{output_filepath}/convenios_y_procedencia.csv", index=False)
 
 
 if __name__ == "__main__":
