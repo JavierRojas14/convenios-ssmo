@@ -59,7 +59,7 @@ def leer_y_limpiar_convenios(input_filepath):
 def leer_y_limpiar_personas_ssmo(input_filepath):
     # Lee archivo de personas
     df_personas = df_personas = pd.read_excel(
-        f"{input_filepath}/Plano DSSMO dic 2023.xlsx",
+        f"{input_filepath}/Plano DSSMO.xlsx",
         usecols=COLUMNA_A_UTILIZAR_PERSONAS,
     )
 
