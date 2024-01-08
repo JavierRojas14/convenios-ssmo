@@ -46,8 +46,12 @@ def leer_y_limpiar_convenios(input_filepath):
     # Reemplaza los nombres de largo 4
     df.loc[nombres_largo_4, "NomRevisor"] = nombres_convenios_largo_4_limpios
 
-    # Solamente deja convenios
+    # Solamente deja convenios y los ordena por su fecha
     df = df.query("Categoria == 'Convenio con Entidades Públicas'")
+    df = df.sort_values(["NumInterno", "FechaHistorico"])
+
+    # Calcula el timepo entre 2 acciones distintas para cada convenio
+    df["tiempo_utilizado"] = df.groupby("NumInterno")["FechaHistorico"].diff()
 
     return df
 
