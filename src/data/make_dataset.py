@@ -104,7 +104,9 @@ def main(input_filepath, output_filepath):
     # Guarda archivos
     df_convenios.to_csv(f"{output_filepath}/convenios_limpios.csv", index=False)
     df_personas.to_csv(f"{output_filepath}/personas_limpios.csv", index=False)
-    df_convenios_y_procedencia.to_csv(f"{output_filepath}/convenios_y_procedencia.csv", index=False)
+    df_convenios_y_procedencia.to_excel(
+        f"{output_filepath}/convenios_y_procedencia.xlsx", index=False
+    )
 
 
 if __name__ == "__main__":
