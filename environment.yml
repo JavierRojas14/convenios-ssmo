@@ -8,4 +8,7 @@ dependencies:
 - python
 - matplotlib
 - openpyxl
+- click
+- python-dotenv
+- pyyaml
 name: convenios-ssmo
