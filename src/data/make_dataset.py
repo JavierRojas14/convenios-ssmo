@@ -28,6 +28,7 @@ def quitar_tildes(texto):
 
 def leer_y_limpiar_documentos(input_filepath):
     df = pd.read_excel(f"{input_filepath}/Reporte SSMOdigital Convenios.xlsx")
+    print(f"> Shape i documentos: {df.shape[0]} documentos")
     # Limpia nombres de convenios
     df["NomRevisor"] = df["NomRevisor"].str.split().str.join(" ")
     df["NomRevisor"] = df["NomRevisor"].apply(quitar_tildes)
@@ -121,6 +122,9 @@ def main(input_filepath, output_filepath):
 
     # Indica las resoluciones asociadas a convenios
     df_documentos_y_procedencia = asociar_convenios_con_resoluciones(df_documentos_y_procedencia)
+
+    # Indica largo de datos limpios
+    print(f"> Shape f documentos: {df_documentos_y_procedencia.shape[0]} documentos")
 
     # Guarda archivos
     df_documentos.to_csv(f"{output_filepath}/documentos_limpios.csv", index=False)
