@@ -26,7 +26,7 @@ def quitar_tildes(texto):
     return texto_limpio
 
 
-def leer_y_limpiar_convenios(input_filepath):
+def leer_y_limpiar_documentos(input_filepath):
     df = pd.read_excel(f"{input_filepath}/Reporte SSMOdigital Convenios.xlsx")
     # Limpia nombres de convenios
     df["NomRevisor"] = df["NomRevisor"].str.split().str.join(" ")
@@ -46,8 +46,8 @@ def leer_y_limpiar_convenios(input_filepath):
     # Reemplaza los nombres de largo 4
     df.loc[nombres_largo_4, "NomRevisor"] = nombres_convenios_largo_4_limpios
 
-    # Solamente deja convenios y los ordena por su fecha
-    df = df.query("Categoria == 'Convenio con Entidades Públicas'")
+    # Ordena documentos por fecha
+    # df = df.query("Categoria == 'Convenio con Entidades Públicas'")
     df = df.sort_values(["NumInterno", "FechaHistorico"])
 
     # Calcula el timepo entre 2 acciones distintas para cada convenio
@@ -76,7 +76,7 @@ def leer_y_limpiar_personas_ssmo(input_filepath):
     return df_personas
 
 
-def unir_convenios_y_personas(df_convenios, df_personas):
+def unir_documentos_y_personas(df_convenios, df_personas):
     convenios_con_procedencia = df_convenios.merge(
         df_personas, how="left", left_on="NomRevisor", right_on="nombre_formateado"
     )
@@ -95,17 +95,17 @@ def main(input_filepath, output_filepath):
     logger.info("making final data set from raw data")
 
     # Lee convenios y personas SSMO
-    df_convenios = leer_y_limpiar_convenios(input_filepath)
+    df_documentos = leer_y_limpiar_documentos(input_filepath)
     df_personas = leer_y_limpiar_personas_ssmo(input_filepath)
 
     # Une convenios y personas
-    df_convenios_y_procedencia = unir_convenios_y_personas(df_convenios, df_personas)
+    df_documentos_y_procedencia = unir_documentos_y_personas(df_documentos, df_personas)
 
     # Guarda archivos
-    df_convenios.to_csv(f"{output_filepath}/convenios_limpios.csv", index=False)
+    df_documentos.to_csv(f"{output_filepath}/documentos_limpios.csv", index=False)
     df_personas.to_csv(f"{output_filepath}/personas_limpios.csv", index=False)
-    df_convenios_y_procedencia.to_excel(
-        f"{output_filepath}/convenios_y_procedencia.xlsx", index=False
+    df_documentos_y_procedencia.to_excel(
+        f"{output_filepath}/documentos_y_procedencia.xlsx", index=False
     )
 
 
