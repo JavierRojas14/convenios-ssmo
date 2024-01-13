@@ -84,6 +84,24 @@ def unir_documentos_y_personas(df_convenios, df_personas):
     return convenios_con_procedencia
 
 
+def asociar_convenios_con_resoluciones(df):
+    tmp = df.copy()
+
+    # Agrupa por cada uno de los convenios, y obtiene las resoluciones enlazadas al convenio
+    convenios_con_resoluciones = tmp.groupby("DocConvAsociado")["NumInterno"].unique().astype(str)
+    # Renombra la lista de resoluciones a un nombre apropiado
+    convenios_con_resoluciones.name = "DocResAsociado"
+
+    # Une los convenios con sus respectivas resoluciones
+    df_con_convenios_asociados_a_resoluciones = (
+        tmp.set_index("NumInterno")
+        .merge(convenios_con_resoluciones, how="left", left_index=True, right_index=True)
+        .reset_index(names="NumInterno")
+    )
+
+    return df_con_convenios_asociados_a_resoluciones
+
+
 @click.command()
 @click.argument("input_filepath", type=click.Path(exists=True))
 @click.argument("output_filepath", type=click.Path())
@@ -100,6 +118,9 @@ def main(input_filepath, output_filepath):
 
     # Une convenios y personas
     df_documentos_y_procedencia = unir_documentos_y_personas(df_documentos, df_personas)
+
+    # Indica las resoluciones asociadas a convenios
+    df_documentos_y_procedencia = asociar_convenios_con_resoluciones(df_documentos_y_procedencia)
 
     # Guarda archivos
     df_documentos.to_csv(f"{output_filepath}/documentos_limpios.csv", index=False)
